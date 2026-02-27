@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { useExpenses } from "@/lib/hooks";
 import { exportToCSV, formatCurrency } from "@/lib/analytics";
 import { Expense, ExpenseFilters } from "@/lib/types";
@@ -78,9 +79,15 @@ export default function ExpensesPage() {
               onClick={() => exportToCSV(filtered.length > 0 ? filtered : expenses)}
               className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm"
             >
-              📥 Export CSV
+              📥 Quick CSV
             </button>
           )}
+          <Link
+            href="/export"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-xl hover:bg-indigo-100 transition-colors shadow-sm"
+          >
+            ☁️ Export Hub
+          </Link>
           <button
             onClick={() => setShowAddModal(true)}
             className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
