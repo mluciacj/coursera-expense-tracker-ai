@@ -2,13 +2,14 @@
 
 import { useState, useMemo } from "react";
 import { useExpenses } from "@/lib/hooks";
-import { exportToCSV, formatCurrency } from "@/lib/analytics";
+import { formatCurrency } from "@/lib/analytics";
 import { Expense, ExpenseFilters } from "@/lib/types";
 import ExpenseCard from "@/components/ui/ExpenseCard";
 import FilterBar from "@/components/forms/FilterBar";
 import Modal from "@/components/ui/Modal";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import ExpenseForm from "@/components/forms/ExpenseForm";
+import ExportModal from "@/components/export/ExportModal";
 
 const DEFAULT_FILTERS: ExpenseFilters = {
   search: "",
@@ -22,6 +23,7 @@ export default function ExpensesPage() {
     useExpenses();
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [editTarget, setEditTarget] = useState<Expense | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -75,10 +77,10 @@ export default function ExpensesPage() {
         <div className="flex items-center gap-2">
           {expenses.length > 0 && (
             <button
-              onClick={() => exportToCSV(filtered.length > 0 ? filtered : expenses)}
+              onClick={() => setShowExportModal(true)}
               className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm"
             >
-              📥 Export CSV
+              <span>📤</span> Export
             </button>
           )}
           <button
@@ -195,6 +197,13 @@ export default function ExpensesPage() {
         }}
         title="Delete Expense"
         message="Are you sure you want to delete this expense? This action cannot be undone."
+      />
+
+      {/* Export Modal */}
+      <ExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        allExpenses={expenses}
       />
     </div>
   );
