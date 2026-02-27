@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useExpenses } from "@/lib/hooks";
-import { computeSummary, formatCurrency } from "@/lib/analytics";
+import { computeSummary, formatCurrency, exportToCSV } from "@/lib/analytics";
 import SummaryCard from "@/components/ui/SummaryCard";
 import SpendingBarChart from "@/components/charts/SpendingBarChart";
 import CategoryPieChart from "@/components/charts/CategoryPieChart";
@@ -45,12 +45,20 @@ export default function DashboardPage() {
             {format(new Date(), "MMMM yyyy")} overview
           </p>
         </div>
-        <Link
-          href="/expenses"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
-        >
-          <span>+</span> Add Expense
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => exportToCSV(expenses)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm"
+          >
+            Export Data
+          </button>
+          <Link
+            href="/expenses"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
+          >
+            <span>+</span> Add Expense
+          </Link>
+        </div>
       </div>
 
       {/* Summary Cards */}

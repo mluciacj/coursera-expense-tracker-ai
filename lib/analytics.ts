@@ -66,11 +66,11 @@ export function formatCurrency(amount: number): string {
 }
 
 export function exportToCSV(expenses: Expense[]): void {
-  const headers = ["Date", "Amount", "Category", "Description"];
+  const headers = ["Date", "Category", "Amount", "Description"];
   const rows = expenses.map((e) => [
     e.date,
-    e.amount.toFixed(2),
     e.category,
+    e.amount.toFixed(2),
     `"${e.description.replace(/"/g, '""')}"`,
   ]);
 
