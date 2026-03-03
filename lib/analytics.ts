@@ -65,7 +65,7 @@ export function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
-export function exportToCSV(expenses: Expense[]): void {
+export function exportToCSV(expenses: Expense[], filename?: string): void {
   const headers = ["Date", "Amount", "Category", "Description"];
   const rows = expenses.map((e) => [
     e.date,
@@ -74,12 +74,35 @@ export function exportToCSV(expenses: Expense[]): void {
     `"${e.description.replace(/"/g, '""')}"`,
   ]);
 
-  const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const totalsRow = ["TOTAL", total.toFixed(2), "", ""];
+
+  const csv = [
+    headers.join(","),
+    ...rows.map((r) => r.join(",")),
+    totalsRow.join(","),
+  ].join("\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `expenses_${format(new Date(), "yyyy-MM-dd")}.csv`;
+  link.download = filename ?? `expenses_${format(new Date(), "yyyy-MM-dd")}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+export function exportToJSON(expenses: Expense[], filename?: string): void {
+  const data = {
+    exportedAt: new Date().toISOString(),
+    count: expenses.length,
+    expenses,
+  };
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename ?? `expenses_${format(new Date(), "yyyy-MM-dd")}.json`;
   link.click();
   URL.revokeObjectURL(url);
 }

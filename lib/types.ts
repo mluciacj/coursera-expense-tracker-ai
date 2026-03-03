@@ -56,6 +56,8 @@ export const CATEGORY_COLORS: Record<Category, string> = {
   Other: "#6b7280",
 };
 
+export type ExportFormat = "csv" | "json";
+
 export const CATEGORY_ICONS: Record<Category, string> = {
   Food: "🍔",
   Transportation: "🚗",
