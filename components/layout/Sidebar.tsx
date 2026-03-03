@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { href: "/", label: "Dashboard", icon: "📊" },
   { href: "/expenses", label: "Expenses", icon: "💳" },
+  { href: "/analytics", label: "Analytics", icon: "📈" },
 ];
 
 export default function Sidebar() {
