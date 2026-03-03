@@ -76,3 +76,4 @@ Generate developer + user documentation for a newly added feature.
   - paths created
   - key code files referenced
   - detected feature type (frontend/backend/full-stack)
+  
