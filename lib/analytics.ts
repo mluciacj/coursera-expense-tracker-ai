@@ -55,7 +55,13 @@ export function computeSummary(expenses: Expense[]): SpendingSummary {
     amount,
   }));
 
-  return { total, thisMonth, lastMonth, topCategory, byCategory, byMonth };
+  const nonZeroMonths = byMonth.filter((m) => m.amount > 0);
+  const avgMonthly =
+    nonZeroMonths.length > 0
+      ? nonZeroMonths.reduce((sum, m) => sum + m.amount, 0) / nonZeroMonths.length
+      : 0;
+
+  return { total, thisMonth, lastMonth, topCategory, byCategory, byMonth, avgMonthly };
 }
 
 export function formatCurrency(amount: number): string {
@@ -105,4 +111,36 @@ export function exportToJSON(expenses: Expense[], filename?: string): void {
   link.download = filename ?? `expenses_${format(new Date(), "yyyy-MM-dd")}.json`;
   link.click();
   URL.revokeObjectURL(url);
+}
+
+export function getTopExpenses(expenses: Expense[], limit = 5): Expense[] {
+  return [...expenses].sort((a, b) => b.amount - a.amount).slice(0, limit);
+}
+
+export function computeCategoryTrend(
+  expenses: Expense[]
+): { category: string; current: number; previous: number; change: number }[] {
+  const now = new Date();
+  const thisMonthStart = startOfMonth(now);
+  const thisMonthEnd = endOfMonth(now);
+  const prevMonthStart = startOfMonth(subMonths(now, 1));
+  const prevMonthEnd = endOfMonth(subMonths(now, 1));
+
+  return CATEGORIES.map((cat) => {
+    const current = expenses
+      .filter((e) => {
+        const d = parseISO(e.date);
+        return e.category === cat && d >= thisMonthStart && d <= thisMonthEnd;
+      })
+      .reduce((sum, e) => sum + e.amount, 0);
+
+    const previous = expenses
+      .filter((e) => {
+        const d = parseISO(e.date);
+        return e.category === cat && d >= prevMonthStart && d <= prevMonthEnd;
+      })
+      .reduce((sum, e) => sum + e.amount, 0);
+
+    return { category: cat, current, previous, change: current - previous };
+  });
 }

@@ -36,6 +36,7 @@ export interface SpendingSummary {
   topCategory: Category | null;
   byCategory: Record<Category, number>;
   byMonth: { month: string; amount: number }[];
+  avgMonthly: number;
 }
 
 export const CATEGORIES: Category[] = [
