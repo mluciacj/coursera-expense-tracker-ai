@@ -8,6 +8,7 @@ const navItems = [
   { href: "/expenses", label: "Expenses", icon: "💳" },
   { href: "/top-categories", label: "Top Categories", icon: "🏆" },
   { href: "/top-vendors", label: "Top Vendors", icon: "🏪" },
+  { href: "/insights", label: "Insights", icon: "💡" },
 ];
 
 export default function Sidebar() {
